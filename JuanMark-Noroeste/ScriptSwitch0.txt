@@ -1,0 +1,49 @@
+ena
+conf t
+hostname NW-C0
+
+enable secret 1234#
+service password-encryption
+ip domain name JuanMark.com
+crypto key generate rsa  
+1024
+username admin secret cisco
+
+line console 0
+  login local
+line vty 0 15
+  transport input ssh
+  login local
+exit
+
+vtp mode client
+vtp domain JuanMark.com
+vtp password 1234#
+
+interface Vlan 9
+ ip address 148.60.3.3 255.255.255.0
+ no shutdown
+ip default-gateway 148.60.3.1
+
+interface range GigabitEthernet0/1 - 2
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk allowed vlan 5,6,7,9
+exit
+interface FastEthernet0/24
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk allowed vlan 5,6,7,9
+
+
+interface range FastEthernet0/1 - 23
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ spanning-tree portfast
+
+interface FastEthernet0/1
+ switchport access vlan 9  
+end
