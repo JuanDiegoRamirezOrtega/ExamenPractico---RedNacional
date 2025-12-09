@@ -1,0 +1,139 @@
+enable
+configure terminal
+hostname MSW_ANEXO
+
+! ========================================
+!  CONFIGURACIÓN BASE Y ACCESO SSH 
+! ========================================
+service password-encryption
+ip domain-name juanmark.com
+username admin secret cisco
+crypto key generate rsa
+1024
+line vty 0 4
+ transport input ssh
+ login local
+exit
+line con 0
+ logging synchronous
+exit
+
+! =========================
+!  CONFIGURACIÓN VTP 
+! =========================
+vtp domain juanmark
+vtp version 2
+vtp mode client
+
+! =========================================
+!  AJUSTES GLOBALES Y SPANNING-TREE 
+! =========================================
+no ip cef
+no ipv6 cef
+spanning-tree mode pvst
+spanning-tree extend system-id
+
+! ===========================
+!  ENLACES TRONCALES LAN 
+! ===========================
+
+! Port-channel 1: Troncal Lógico a MSW_Principal
+interface Port-channel1
+ switchport mode trunk
+ ip dhcp snooping trust
+ ip arp inspection trust
+ no shutdown
+exit
+
+! G1/0/12-13: Puertos Físicos para EtherChannel
+interface range GigabitEthernet1/0/12-13
+ switchport mode trunk
+ channel-protocol pagp
+ channel-group 1 mode desirable
+ ip dhcp snooping trust
+ ip arp inspection trust
+ no shutdown
+exit
+
+! G1/0/3: Troncal a SW_Anexo
+interface GigabitEthernet1/0/3
+ switchport mode trunk
+ ip dhcp snooping trust
+ ip arp inspection trust
+ no shutdown
+exit
+
+! =================================================
+!  CONFIGURACIÓN DE PUERTOS DE ACCESO Y SEGURIDAD 
+! =================================================
+
+! VLAN 33 (GESTION_TI)
+interface range GigabitEthernet1/0/1, GigabitEthernet1/0/4-6
+ switchport mode access
+ switchport access vlan 33
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! VLAN 34 (GESTION_WLAN)
+interface range GigabitEthernet1/0/2, GigabitEthernet1/0/7-9
+ switchport mode access
+ switchport access vlan 34
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! VLAN 35 (VENTAS)
+interface range GigabitEthernet1/0/10-11, GigabitEthernet1/0/14
+ switchport mode access
+ switchport access vlan 35
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! VLAN 36 (COMPRAS)
+interface range GigabitEthernet1/0/15-17
+ switchport mode access
+ switchport access vlan 36
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! VLAN 37 (PRACTICANTES)
+interface range GigabitEthernet1/0/18-20
+ switchport mode access
+ switchport access vlan 37
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! ===================================
+!  POLÍTICAS DE SEGURIDAD GLOBAL 
+! ===================================
+ip dhcp snooping
+ip dhcp snooping vlan 33-37
+no ip dhcp snooping information option
+ip arp inspection vlan 33-37
+
+end
+write memory

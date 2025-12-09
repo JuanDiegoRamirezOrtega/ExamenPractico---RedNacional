@@ -1,0 +1,111 @@
+enable
+configure terminal
+hostname MSW_Principal
+ip routing
+
+! =========================
+!  CONFIGURACIÓN VTP 
+! =========================
+vtp domain juanmark
+vtp version 2
+vtp mode server
+
+! ===========================
+!  CREACIÓN DE VLANS SVI 
+! ===========================
+vlan 33
+ name GESTION_TI
+vlan 34
+ name GESTION_WLAN
+vlan 35
+ name VENTAS
+vlan 36
+ name COMPRAS
+vlan 37
+ name PRACTICANTES
+vlan 200
+ name SALIDA_A_ROUTER
+exit
+
+! =====================================
+!  GATEWAYS (SVI) DE LAS VLANS (CE) 
+! =====================================
+interface vlan 33
+ ip address 148.60.96.1 255.255.255.0
+ no shutdown
+exit
+interface vlan 34
+ ip address 148.60.97.1 255.255.255.0
+ no shutdown
+exit
+interface vlan 35
+ ip address 148.60.98.1 255.255.255.0
+ no shutdown
+exit
+interface vlan 36
+ ip address 148.60.99.1 255.255.255.0
+ no shutdown
+exit
+interface vlan 37
+ ip address 148.60.100.1 255.255.255.0
+ no shutdown
+exit
+
+! ==========================================
+!     ENRUTAMIENTO HACIA RT_Centro 
+! ==========================================
+! SVI para Interconexión al RT_Centro
+interface vlan 200
+ ip address 148.60.200.2 255.255.255.248
+ no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 148.60.200.1
+
+! Puerto G1/0/1: Conexión física al Router
+interface GigabitEthernet1/0/1
+ switchport mode access
+ switchport access vlan 200
+ ip dhcp snooping trust
+ ip arp inspection trust
+ no shutdown
+exit
+
+! ===========================
+!    ENLACES TRONCALES LAN 
+! ===========================
+
+! G1/0/2: Troncal a SW_Principal
+interface GigabitEthernet1/0/2
+ switchport mode trunk
+ switchport nonegotiate
+ ip dhcp snooping trust
+ ip arp inspection trust
+ no shutdown
+exit
+
+! Port-channel 1: Troncal Lógico a MSW_ANEXO
+interface port-channel 1
+ switchport mode trunk
+ switchport nonegotiate
+ no shutdown
+exit
+
+! G1/0/12-13: Puertos Físicos para EtherChannel con MSW_ANEXO
+interface range GigabitEthernet1/0/12-13
+ channel-protocol pagp
+ channel-group 1 mode desirable
+ no shutdown
+exit
+
+! ===================================
+!     SEGURIDAD DE CAPA 2 
+! ===================================
+spanning-tree mode pvst
+spanning-tree extend system-id
+ip dhcp snooping
+ip dhcp snooping vlan 33-37
+no ip dhcp snooping information option
+ip arp inspection vlan 33-37
+
+end
+write memory

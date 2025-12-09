@@ -1,0 +1,102 @@
+enable
+configure terminal
+hostname SW_ANEXO
+
+! =========================
+!  CONFIGURACIÓN VTP 
+! =========================
+vtp domain juanmark
+vtp version 2
+vtp mode client
+
+! ===========================
+!  ENLACES TRONCALES LAN 
+! ===========================
+
+! G0/1: Troncal Principal hacia el MSW_Anexo
+interface GigabitEthernet0/1
+ switchport mode trunk
+ ip dhcp snooping trust
+ ip arp inspection trust
+ no shutdown
+exit
+
+! G0/2: Puerto para AP
+interface GigabitEthernet0/2
+ switchport mode access
+ switchport access vlan 34
+ no shutdown
+exit
+
+! ====================================================
+!  CONFIGURACIÓN DE PUERTOS DE ACCESO Y SEGURIDAD 
+! ====================================================
+
+! GESTION_TI (VLAN 33)
+interface range FastEthernet0/1-4, FastEthernet0/21-24
+ switchport mode access
+ switchport access vlan 33
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! GESTION_WLAN (VLAN 34)
+interface range FastEthernet0/5-8
+ switchport mode access
+ switchport access vlan 34
+ spanning-tree portfast
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! VENTAS (VLAN 35)
+interface range FastEthernet0/13-16
+ switchport mode access
+ switchport access vlan 35
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! COMPRAS (VLAN 36)
+interface range FastEthernet0/9-12
+ switchport mode access
+ switchport access vlan 36
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! PRACTICANTES (VLAN 37)
+interface range FastEthernet0/17-20
+ switchport mode access
+ switchport access vlan 37
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ no shutdown
+exit
+
+! ===================================
+!  POLÍTICAS DE SEGURIDAD GLOBAL 
+! ===================================
+ip dhcp snooping
+ip dhcp snooping vlan 33-37
+ip arp inspection vlan 33-37
+
+end
+write memory

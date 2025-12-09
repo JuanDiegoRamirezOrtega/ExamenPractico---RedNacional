@@ -1,0 +1,111 @@
+enable
+configure terminal
+hostname RT_Centro
+
+! ===============================================
+!     CONFIGURACIÓN BASE Y SEGURIDAD 
+! ===============================================
+service password-encryption
+enable secret cisco
+ip domain-name juanmark.com
+username admin secret cisco
+crypto key generate rsa
+1024
+line vty 0 4
+ login local
+ transport input ssh
+exit
+no ip cef
+no ipv6 cef
+
+! =======================================
+!   CONFIGURACIÓN DE INTERFACES FÍSICAS 
+! =======================================
+
+! G0/0: Enlace al MSW_Principal (148.60.200.1/29)
+interface GigabitEthernet0/0
+ ip address 148.60.200.1 255.255.255.248
+ no shutdown
+exit
+
+! S0/0/0: Conexión Serial a Internet/Nube
+interface Serial0/0/0
+ ip address 148.60.160.17 255.255.255.252
+ clock rate 2000000
+ no shutdown
+exit
+
+! S0/1/0: Enlace Serial hacia la Región Noreste (NE)
+interface Serial0/1/0
+ ip address 148.60.160.10 255.255.255.252
+ clock rate 2000000
+ no shutdown
+exit
+
+! S0/0/1: Enlace de Backup (shutdown)
+interface Serial0/0/1
+ ip address 148.60.255.6 255.255.255.252
+ clock rate 2000000
+ shutdown
+exit
+
+! =========================================
+!     PROTOCOLO DE ENRUTAMIENTO 
+! =========================================
+router rip
+ version 2
+ passive-interface GigabitEthernet0/0
+ network 148.60.0.0
+ no auto-summary
+exit
+
+! =========================================
+!    SERVIDOR DHCP PARA REDES DEL CENTRO 
+! =========================================
+
+! Exclusiones de Gateways y APs
+ip dhcp excluded-address 148.60.96.1
+ip dhcp excluded-address 148.60.97.1
+ip dhcp excluded-address 148.60.97.2
+ip dhcp excluded-address 148.60.98.1
+ip dhcp excluded-address 148.60.99.1
+ip dhcp excluded-address 148.60.100.1
+
+! Pool: VLAN 33 (GESTION de TI)
+ip dhcp pool POOL_TI
+ network 148.60.96.0 255.255.255.0
+ default-router 148.60.96.1
+ dns-server 8.8.8.8
+exit
+
+! Pool: VLAN 34 (GESTION de WLAN)
+ip dhcp pool POOL_APS
+ network 148.60.97.0 255.255.255.0
+ default-router 148.60.97.1
+ option 43 ip 148.60.97.2
+ dns-server 8.8.8.8
+exit
+
+! Pool: VLAN 35 (VENTAS)
+ip dhcp pool POOL_VENTAS
+ network 148.60.98.0 255.255.255.0
+ default-router 148.60.98.1
+ dns-server 8.8.8.8
+exit
+
+! Pool: VLAN 36 (COMPRAS)
+ip dhcp pool POOL_COMPRAS
+ network 148.60.99.0 255.255.255.0
+ default-router 148.60.99.1
+ dns-server 8.8.8.8
+exit
+
+! Pool: VLAN 37 (PRACTICANTES)
+ip dhcp pool POOL_PRACTICANTES
+ network 148.60.100.0 255.255.255.0
+ default-router 148.60.100.1
+ dns-server 8.8.8.8
+exit
+
+end
+write memory
