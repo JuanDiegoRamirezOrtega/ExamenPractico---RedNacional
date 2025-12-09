@@ -1,0 +1,56 @@
+enable
+configure terminal
+hostname DSW1
+
+service password-encryption
+enable secret cisco
+username admin secret cisco
+ip domain-name juanmark.com
+crypto key generate rsa 
+1024
+line vty 0 15
+ transport input ssh
+ login local
+exit
+
+vtp domain JuanMark
+vtp version 2
+vtp mode server
+vtp password cisco
+vlan 65; name Marketing
+vlan 66; name Ventas
+vlan 67; name Compras
+vlan 68; name Gestion_TI
+exit
+
+interface range g1/0/1-6
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk allowed vlan 65-68
+ channel-protocol pagp
+ channel-group 1 mode desirable
+exit
+interface gig1/0/7
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk allowed vlan 65-68
+ exit
+interface g1/0/24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk allowed vlan 65-68
+ no shutdown
+ exit
+
+interface Port-channel 1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk allowed vlan 65-68
+ 
+ spanning-tree mode rapid-pvst
+ spanning-tree vlan 65-68 priority 4096
+ exit

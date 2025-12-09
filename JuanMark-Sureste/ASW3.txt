@@ -1,0 +1,76 @@
+enable
+configure terminal
+hostname ASW3
+
+service password-encryption
+enable secret cisco
+username admin secret cisco
+ip domain-name juanmark.com
+crypto key generate rsa     
+1024
+line vty 0 15
+ transport input ssh
+ login local
+exit
+
+vtp domain JuanMark
+vtp version 2
+vtp mode client
+vtp password cisco
+interface range g1/0/1-2
+channel-protocol pagp
+channel-group 1 mode desirable
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 65-68
+no shutdown
+exit
+interface Port-channel 1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 65-68
+exit
+interface range g1/0/3-6
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 65-68
+exit
+interface range f0/4-10
+switchport mode access
+switchport access vlan 65
+spanning-tree portfast
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+exit
+interface range f0/11-15
+switchport mode access
+switchport access vlan 66
+spanning-tree portfast
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+exit
+interface range f0/16-19
+switchport mode access
+switchport access vlan 67
+spanning-tree portfast
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+exit
+interface range f0/20-24
+switchport mode access
+switchport access vlan 68
+spanning-tree portfast
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+exit

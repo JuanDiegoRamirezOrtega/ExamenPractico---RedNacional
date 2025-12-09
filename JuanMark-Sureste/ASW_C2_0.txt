@@ -1,0 +1,26 @@
+enable
+configure terminal
+hostname ASW_C2_0
+
+vtp domain JuanMark
+vtp version 2
+vtp mode client
+vtp password cisco
+interface range fa0/1-2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk allowed vlan 65-68
+ no shutdown
+ exit
+
+interface range f0/10-15
+ switchport mode access
+ switchport access vlan 65
+ spanning-tree portfast
+ exit
+interface range f0/16-20
+ switchport mode access
+ switchport access vlan 66
+ spanning-tree portfast
+ exit
