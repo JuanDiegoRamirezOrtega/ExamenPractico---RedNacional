@@ -16,7 +16,7 @@ exit
 vtp domain JuanMark
 vtp version 2
 vtp mode client
-vtp password cisco
+vtp password 1234#
 
 interface range g1/0/1-2
 channel-protocol pagp

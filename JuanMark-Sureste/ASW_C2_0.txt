@@ -2,10 +2,25 @@ enable
 configure terminal
 hostname ASW_C2_0
 
+enable secret 1234#
+service password-encryption
+ip domain name JuanMark.com
+crypto key generate rsa  
+1024
+username admin secret cisco
+
+line console 0
+  login local
+line vty 0 15
+  transport input ssh
+  login local
+exit
+
 vtp domain JuanMark
 vtp version 2
 vtp mode client
-vtp password cisco
+vtp password 1234#
+
 interface range fa0/1-2
  switchport trunk encapsulation dot1q
  switchport mode trunk

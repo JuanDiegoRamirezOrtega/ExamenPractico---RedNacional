@@ -1,0 +1,40 @@
+enable
+configure terminal
+hostname ASW_SINW
+
+service password-encryption
+enable secret cisco
+username admin secret cisco
+ip domain-name juanmark.com
+crypto key generate rsa 
+1024
+line vty 0 15
+ transport input ssh
+ login local
+exit
+
+vtp domain JuanMark
+vtp version 2
+vtp mode client
+vtp password 1234#
+
+interface range f0/1-2
+ switchport mode trunk
+ switchport nonegotiate
+ ! NO ponemos channel-group
+ switchport trunk allowed vlan 1,65-68
+ no shutdown
+ exit
+
+
+interface f0/3
+ description Conectado_a_AP
+ switchport mode access
+ switchport access vlan 66
+ spanning-tree portfast
+ no shutdown
+ exit
+
+
+
+
