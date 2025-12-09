@@ -30,9 +30,9 @@ vlan 9
 exit
 
 interface Vlan 9
- ip address 148.60.3.2 255.255.255.0
+ ip address 148.60.9.2 255.255.255.0
  no shutdown
-ip default-gateway 148.60.3.1
+ip default-gateway 148.60.9.1
 
 interface range GigabitEthernet0/1 - 2
  switchport mode trunk
