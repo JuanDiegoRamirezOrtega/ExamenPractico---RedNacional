@@ -19,14 +19,14 @@ exit
 
 ipv6 unicast-routing
 
-ip dhcp excluded-address 148.60.0.1 148.60.0.10
-ip dhcp excluded-address 148.60.1.1 148.60.1.10
-ip dhcp excluded-address 148.60.2.1 148.60.2.10
-ip dhcp excluded-address 148.60.3.1 148.60.3.10
+ip dhcp excluded-address 148.60.5.1 148.60.5.10
+ip dhcp excluded-address 148.60.6.1 148.60.6.10
+ip dhcp excluded-address 148.60.7.1 148.60.7.10
+ip dhcp excluded-address 148.60.9.1 148.60.9.10
 
 ip dhcp pool MKT-V4
- network 148.60.0.0 255.255.255.0
- default-router 148.60.0.1
+ network 148.60.5.0 255.255.255.0
+ default-router 148.60.5.1
  dns-server 148.60.128.10
  domain name JuanMark.com
 exit
@@ -36,8 +36,8 @@ ipv6 dhcp pool MKT-V6
  domain name JuanMark.com
 exit
 ip dhcp pool VENTAS-V4
- network 148.60.1.0 255.255.255.0
- default-router 148.60.1.1
+ network 148.60.6.0 255.255.255.0
+ default-router 148.60.6.1
  dns-server 148.60.128.10
  domain name JuanMark.com
 exit
@@ -47,8 +47,8 @@ ipv6 dhcp pool VENTAS-V6
  domain name JuanMark.com
 exit
 ip dhcp pool COMPRAS-V4
- network 148.60.2.0 255.255.255.0
- default-router 148.60.2.1
+ network 148.60.7.0 255.255.255.0
+ default-router 148.60.7.1
  dns-server 148.60.128.10
  domain name JuanMark.com
 exit
@@ -58,8 +58,8 @@ ipv6 dhcp pool COMPRAS-V6
  domain name JuanMark.com
 exit
 ip dhcp pool GESTIONTI-V4
- network 148.60.3.0 255.255.255.0
- default-router 148.60.3.1
+ network 148.60.9.0 255.255.255.0
+ default-router 148.60.9.1
  dns-server 148.60.128.10
  domain name JuanMark.com
 exit
@@ -69,15 +69,17 @@ ipv6 dhcp pool GESTIONTI-V6
  domain name JuanMark.com
 exit
 
-interface GigabitEthernet0/1
+interface Serial0/3/0
  ip address 148.60.160.5 255.255.255.252
  ipv6 address 2006:AFEA:B0CA:WAN-CE::1/64
+ clock rate 128000
  description LinktoCE
  no shutdown
 exit
-interface GigabitEthernet0/2
+interface Serial0/3/1
  ip address 148.60.160.1 255.255.255.252
  ipv6 address 2006:AFEA:B0CA:WAN-NE::1/64
+ clock rate 128000
  description LinktoNE
  no shutdown
 exit
@@ -90,25 +92,25 @@ interface GigabitEthernet0/0
 interface GigabitEthernet0/0.5
  description VLANMarketing
  encapsulation dot1Q 5
- ip address 148.60.0.1 255.255.255.0
+ ip address 148.60.5.1 255.255.255.0
  ipv6 address 2006:AFEA:B0CA:5::1/64
  ipv6 dhcp server MKT-V6
 interface GigabitEthernet0/0.6
  description VLANVentas
  encapsulation dot1Q 6
- ip address 148.60.1.1 255.255.255.0
+ ip address 148.60.6.1 255.255.255.0
  ipv6 address 2006:AFEA:B0CA:6::1/64
  ipv6 dhcp server VENTAS-V6
 interface GigabitEthernet0/0.7
  description VLANCompras
  encapsulation dot1Q 7
- ip address 148.60.2.1 255.255.255.0
+ ip address 148.60.7.1 255.255.255.0
  ipv6 address 2006:AFEA:B0CA:7::1/64
  ipv6 dhcp server COMPRAS-V6
 interface GigabitEthernet0/0.9
  description VLANGestion_TI
  encapsulation dot1Q 9
- ip address 148.60.3.1 255.255.255.0
+ ip address 148.60.9.1 255.255.255.0
  ipv6 address 2006:AFEA:B0CA:9::1/64
  ipv6 dhcp server GESTIONTI-V6
 
