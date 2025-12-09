@@ -1,0 +1,101 @@
+SwitchNE04 (el de la derecha):
+enable
+configure terminal
+hostname SwitchNE_AP
+ip domain-name juanmark.com
+
+
+enable secret cisco
+service password-encryption
+username admin secret cisco123
+
+crypto key generate rsa
+
+ip ssh version 2
+
+line vty 0 4
+login local
+transport input ssh
+exit
+
+vtp mode client
+vtp domain juanmark
+vtp password cisco
+vtp version 2
+
+
+spanning-tree mode rapid-pvst
+
+
+
+interface fa0/2
+description Link_to_SwitchNE01
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 97-100
+no shutdown
+exit
+
+
+interface fa0/1
+description Link_to_SwitchNE03
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 97-100
+no shutdown
+exit
+
+
+interface fa0/5
+description Laptop_Ventas
+switchport mode access
+switchport access vlan 98
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+spanning-tree portfast
+exit
+
+interface fa0/4
+description Laptop_Compras
+switchport mode access switchport access vlan 99
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+spanning-tree portfast
+exit
+
+interface fa0/3
+description AccessPoint_Ventas
+switchport mode access
+switchport access vlan 98
+switchport port-security
+switchport port-security maximum 10
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+exit
+
+
+interface gig0/1
+description WirelessRouter_Servicios
+switchport mode access
+switchport access vlan 100
+switchport port-security
+switchport port-security maximum 5
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+exit
+
+
+interface vlan 97
+ip address 148.60.32.14 255.255.255.0
+no shutdown
+exit
+ip default-gateway 148.60.32.1
+
+end
+write memory

@@ -1,0 +1,99 @@
+SwitchNE01 (conectado directamente a ElCabrito)
+enable
+configure terminal
+hostname SwitchNE01
+ip domain-name juanmark.com
+
+enable secret cisco
+service password-encryption
+username admin secret cisco123
+
+crypto key generate rsa
+ip ssh version 2
+
+line vty 0 4
+login local
+transport input ssh
+exit
+
+
+vtp mode server
+vtp domain juanmark
+vtp password cisco
+vtp version 2
+
+
+vlan 97
+ name GESTIONTI
+vlan 98
+ name VENTAS
+vlan 99
+ name COMPRAS
+vlan 100
+ name SERVICIOS
+exit
+
+
+spanning-tree mode rapid-pvst
+spanning-tree vlan 97,98 root primary
+
+
+interface g0/2
+description Link_to_ElCabrito
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 97-100
+no shutdown
+exit
+
+
+interface fa0/1
+description Link_to_Switch2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 97-100
+no shutdown
+exit
+
+interface g0/1
+description Link_to_Switch2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 97-100
+no shutdown
+exit
+
+
+interface fa0/3
+description LaptopTI
+switchport mode access
+switchport access vlan 97
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+spanning-tree portfast
+exit
+
+interface fa0/2
+description LaptopCOMPRAS
+switchport mode access
+switchport access vlan 99
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+spanning-tree portfast
+exit
+
+
+interface vlan 97
+ip address 148.60.32.11 255.255.255.0
+no shutdown
+exit
+
+end
+write memory
