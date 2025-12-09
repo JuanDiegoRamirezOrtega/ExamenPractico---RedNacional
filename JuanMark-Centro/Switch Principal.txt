@@ -25,7 +25,7 @@ vtp mode client
 ! ===========================
 !  ENLACE TRONCAL AL CORE 
 ! ===========================
-! G0/1: Conexión Troncal al MSW_Principal
+! G0/1: Conexión Troncal al SWITCH MULTICAPA PRINCIPAL
 interface GigabitEthernet0/1
  switchport mode trunk
  ip dhcp snooping trust

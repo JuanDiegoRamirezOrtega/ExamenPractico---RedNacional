@@ -1,6 +1,6 @@
 enable
 configure terminal
-hostname MSW_Principal
+hostname SWITCH_MULTICAPA_PRINCIPAL
 ip routing
 
 ! =========================
@@ -52,9 +52,9 @@ interface vlan 37
 exit
 
 ! ==========================================
-!     ENRUTAMIENTO HACIA RT_Centro 
+!     ENRUTAMIENTO HACIA RT_CENTRO
 ! ==========================================
-! SVI para Interconexión al RT_Centro
+! SVI para Interconexión al RT_CENTRO
 interface vlan 200
  ip address 148.60.200.2 255.255.255.248
  no shutdown
@@ -74,7 +74,7 @@ exit
 !    ENLACES TRONCALES LAN 
 ! ===========================
 
-! G1/0/2: Troncal a SW_Principal
+! G1/0/2: Troncal a SW_PRINCIPAL
 interface GigabitEthernet1/0/2
  switchport mode trunk
  switchport nonegotiate
@@ -83,14 +83,14 @@ interface GigabitEthernet1/0/2
  no shutdown
 exit
 
-! Port-channel 1: Troncal Lógico a MSW_ANEXO
+! Port-channel 1: Troncal Lógico a SWITCH MULTICAPA ANEXO
 interface port-channel 1
  switchport mode trunk
  switchport nonegotiate
  no shutdown
 exit
 
-! G1/0/12-13: Puertos Físicos para EtherChannel con MSW_ANEXO
+! G1/0/12-13: Puertos Físicos para EtherChannel con SWITCH MULTICAPA ANEXO
 interface range GigabitEthernet1/0/12-13
  channel-protocol pagp
  channel-group 1 mode desirable

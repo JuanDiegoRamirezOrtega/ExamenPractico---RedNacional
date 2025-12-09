@@ -13,7 +13,7 @@ vtp mode client
 !  ENLACES TRONCALES LAN 
 ! ===========================
 
-! G0/1: Troncal Principal hacia el MSW_Anexo
+! G0/1: Troncal Principal hacia el SWITCH MULTICAPA ANEXO
 interface GigabitEthernet0/1
  switchport mode trunk
  ip dhcp snooping trust

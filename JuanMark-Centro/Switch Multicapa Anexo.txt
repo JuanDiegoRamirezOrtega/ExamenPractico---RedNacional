@@ -1,6 +1,6 @@
 enable
 configure terminal
-hostname MSW_ANEXO
+hostname SWITCH_MULTICAPA_ANEXO
 
 ! ========================================
 !  CONFIGURACIÓN BASE Y ACCESO SSH 
@@ -37,7 +37,7 @@ spanning-tree extend system-id
 !  ENLACES TRONCALES LAN 
 ! ===========================
 
-! Port-channel 1: Troncal Lógico a MSW_Principal
+! Port-channel 1: Troncal Lógico a SWITCH MULTICAPA PRINCIPAL
 interface Port-channel1
  switchport mode trunk
  ip dhcp snooping trust
@@ -55,7 +55,7 @@ interface range GigabitEthernet1/0/12-13
  no shutdown
 exit
 
-! G1/0/3: Troncal a SW_Anexo
+! G1/0/3: Troncal a SW_ANEXO
 interface GigabitEthernet1/0/3
  switchport mode trunk
  ip dhcp snooping trust
