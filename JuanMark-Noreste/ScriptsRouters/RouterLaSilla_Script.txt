@@ -15,29 +15,29 @@ login local
 transport input ssh
 exit
 
-ip dhcp excluded-address 148.60.32.1 148.60.32.10
-ip dhcp excluded-address 148.60.33.1 148.60.33.10
-ip dhcp excluded-address 148.60.34.1 148.60.34.10
-ip dhcp excluded-address 148.60.35.1 148.60.35.10
+ip dhcp excluded-address 148.60.97.1 148.60.97.10
+ip dhcp excluded-address 148.60.98.1 148.60.98.10
+ip dhcp excluded-address 148.60.99.1 148.60.99.10
+ip dhcp excluded-address 148.60.100.1 148.60.100.10
 
 ip dhcp pool GESTIONTI
-network 148.60.32.0 255.255.255.0
-default-router 148.60.32.1
+network 148.60.97.0 255.255.255.0
+default-router 148.60.97.1
 dns-server 8.8.8.8
 
 ip dhcp pool VENTAS
-network 148.60.33.0 255.255.255.0
-default-router 148.60.33.1
+network 148.60.98.0 255.255.255.0
+default-router 148.60.98.1
 dns-server 8.8.8.8
 
 ip dhcp pool COMPRAS
-network 148.60.34.0 255.255.255.0
-default-router 148.60.34.1
+network 148.60.99.0 255.255.255.0
+default-router 148.60.99.1
 dns-server 8.8.8.8
 
 ip dhcp pool SERVICIOS
-network 148.60.35.0 255.255.255.0
-default-router 148.60.35.1
+network 148.60.100.0 255.255.255.0
+default-router 148.100.35.1
 dns-server 8.8.8.8
 
 interface g0/1
@@ -46,22 +46,22 @@ exit
 
 interface g0/1.97
 encapsulation dot1q 97
-ip address 148.60.32.4 255.255.255.0
+ip address 148.60.97.4 255.255.255.0
 exit
 
 interface g0/1.98
 encapsulation dot1Q 98
-ip address 148.60.33.4 255.255.255.0
+ip address 148.60.98.4 255.255.255.0
 exit
 
 interface g0/1.99
 encapsulation dot1q 99
-ip address 148.60.34.4 255.255.255.0
+ip address 148.60.99.4 255.255.255.0
 exit
 
 interface g0/1.100
 encapsulation dot1q 100
-ip address 148.60.35.4 255.255.255.0
+ip address 148.60.100.4 255.255.255.0
 exit
 
 router rip
