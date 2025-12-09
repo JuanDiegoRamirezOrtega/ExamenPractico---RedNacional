@@ -2,27 +2,25 @@ enable
 configure terminal
 hostname Router_Itzamna
 
-! --- CONFIGURACIÓN BASE Y SSH (Punto 1) ---
 service password-encryption
 enable secret cisco
 username admin secret cisco
 ip domain-name juanmark.com
-crypto key generate rsa modulus 1024
+crypto key generate rsa
+1024
 line vty 0 15
  transport input ssh
  login local
 exit
 
-! --- PASO 1: Encender la Interfaz Física ---
 interface g0/0/0
  no shutdown
- exit
+exit
 
-! --- PASO 2: Configurar Subinterfaces y HSRP (Punto 5) ---
 interface g0/0/0.65
  encapsulation dot1Q 65
  ip address 148.60.65.2 255.255.255.0
- standby 65 ip 148.60.65.1
+ standby 65 ip 148.60.65.1  
  standby 65 priority 150
  standby 65 preempt
  exit
@@ -48,7 +46,19 @@ interface g0/0/0.68
  standby 68 preempt
  exit
 
-! --- PASO 3: Configurar el Servidor DHCP (Punto 5) ---
+interface gigabitethernet0/0/1
+ description YUMKAAX
+ ip address 148.60.64.9 255.255.255.252
+ no shutdown
+exit
+
+interface serial 0/1/0
+ description CENTRO
+ ip address 148.60.160.13 255.255.255.252
+ clock rate 128000
+ no shutdown
+exit
+
 ip dhcp excluded-address 148.60.65.1 148.60.65.3
 ip dhcp pool VENTAS
  network 148.60.65.0 255.255.255.0
@@ -74,13 +84,16 @@ ip dhcp pool MKT
  dns-server 8.8.8.8
  exit
 
-! --- PASO 4: Enrutamiento RIPv2 (Punto 3) ---
 router rip
  version 2
  no auto-summary
- network 148.60.0.0
+ network 148.60.0.0     
  passive-interface g0/0/0.65
  passive-interface g0/0/0.66
  passive-interface g0/0/0.67
  passive-interface g0/0/0.68
+ no passive-interface gigabitethernet0/0/1
+ no passive-interface serial0/1/0
  exit
+
+end
