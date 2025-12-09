@@ -6,7 +6,7 @@ service password-encryption
 enable secret cisco
 username admin secret cisco
 ip domain-name juanmark.com
-crypto key generate rsa 
+crypto key generate rsa
 1024
 line vty 0 15
  transport input ssh
@@ -46,10 +46,27 @@ interface g0/0/0.68
  standby 68 preempt
  exit
 
+interface gigabitethernet0/0/1
+ description ITZAMNA
+ ip address 148.60.64.10 255.255.255.252
+ no shutdown
+exit
+
+interface serial 0/1/0
+ description BAJAS
+ ip address 148.60.160.10 255.255.255.252
+ clock rate 128000 
+ no shutdown
+exit
+
 router rip
  version 2
  no auto-summary
- network 148.60.0.0
+ network 148.60.0.0      
  passive-interface default
  no passive-interface g0/0/0
+ no passive-interface gigabitethernet0/0/1 
+ no passive-interface serial0/1/0     
 exit
+
+end
