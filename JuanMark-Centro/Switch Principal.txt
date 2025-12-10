@@ -15,6 +15,22 @@ line vty 0 4
  login local
 exit
 
+! ===============================================
+!     CONFIGURACIÓN BASE Y SEGURIDAD 
+! ===============================================
+service password-encryption
+enable secret cisco
+ip domain-name juanmark.com
+username admin secret cisco
+crypto key generate rsa
+1024
+line vty 0 4
+ login local
+ transport input ssh
+exit
+no ip cef
+no ipv6 cef
+
 ! =========================
 !  CONFIGURACIÓN VTP 
 ! =========================

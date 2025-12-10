@@ -2,21 +2,21 @@ enable
 configure terminal
 hostname SWITCH_MULTICAPA_ANEXO
 
-! ========================================
-!  CONFIGURACIÓN BASE Y ACCESO SSH 
-! ========================================
+! ===============================================
+!     CONFIGURACIÓN BASE Y SEGURIDAD 
+! ===============================================
 service password-encryption
+enable secret cisco
 ip domain-name juanmark.com
 username admin secret cisco
 crypto key generate rsa
 1024
 line vty 0 4
- transport input ssh
  login local
+ transport input ssh
 exit
-line con 0
- logging synchronous
-exit
+no ip cef
+no ipv6 cef
 
 ! =========================
 !  CONFIGURACIÓN VTP 
